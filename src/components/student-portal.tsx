@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { locations, sectors, recommendedInternships } from "@/lib/data";
-import { MapPin, Briefcase } from "lucide-react";
+import { MapPin, Briefcase, GraduationCap, Sparkles, User, Zap, BookOpen } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
 
@@ -66,18 +66,37 @@ export default function StudentPortal() {
     });
   }
 
+  // Predefined vibrant colors for avatars
+  const avatarColors = [
+      "bg-cyan-500", "bg-indigo-500", "bg-amber-500", 
+      "bg-emerald-500", "bg-rose-500", "bg-violet-500"
+  ];
+
   return (
-    <div className="space-y-8 mt-4">
-      <Card className="max-w-2xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto animate-fade-in-up">
+      {/* Header Banner */}
+      <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-r from-cyan-950/20 to-indigo-950/20 backdrop-blur-md">
+        <CardContent className="p-8 md:p-10 flex flex-col md:flex-row items-center gap-6">
+          <div className="bg-cyan-500/20 p-4 rounded-full shadow-inner">
+            <GraduationCap className="w-12 h-12 text-cyan-400" />
+          </div>
+          <div className="text-center md:text-left">
+            <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground mb-2">Student Portal</h2>
+            <p className="text-muted-foreground text-lg">Fill out your profile to get personalized AI-powered internship recommendations</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="max-w-2xl mx-auto shadow-lg border-t-4 border-t-primary glass">
         <CardHeader>
-          <CardTitle>PM Internship Portal</CardTitle>
+          <CardTitle className="text-2xl flex items-center gap-2"><User className="w-6 h-6 text-primary"/> Your Profile</CardTitle>
           <CardDescription>
-            Fill out your profile to get personalized internship recommendations.
+            Help us understand your skills and preferences.
           </CardDescription>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <FormField
                 control={form.control}
                 name="name"
@@ -85,7 +104,10 @@ export default function StudentPortal() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Jane Doe" {...field} />
+                        <div className="relative">
+                            <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input className="pl-9" placeholder="e.g. Jane Doe" {...field} />
+                        </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,7 +120,10 @@ export default function StudentPortal() {
                   <FormItem>
                     <FormLabel>Skills</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. React, Figma, SQL" {...field} />
+                         <div className="relative">
+                            <Zap className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input className="pl-9" placeholder="e.g. React, Figma, SQL" {...field} />
+                        </div>
                     </FormControl>
                     <FormDescription>
                       Enter your skills separated by commas.
@@ -114,16 +139,16 @@ export default function StudentPortal() {
                   <FormItem>
                     <FormLabel>Education</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="e.g. B.Tech in Computer Science"
-                        {...field}
-                      />
+                        <div className="relative">
+                            <BookOpen className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input className="pl-9" placeholder="e.g. B.Tech in Computer Science" {...field} />
+                        </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
                   name="location"
@@ -181,56 +206,76 @@ export default function StudentPortal() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="bg-accent hover:bg-accent/90">
-                Find Internships
+              <Button type="submit" className="w-full bg-gradient-to-r from-primary to-cyan-600 hover:from-primary/90 hover:to-cyan-600/90 text-white shadow-md text-lg h-12 rounded-xl">
+                 <Sparkles className="mr-2 h-5 w-5" /> Find Internships
               </Button>
             </CardFooter>
           </form>
         </Form>
       </Card>
 
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-headline font-semibold mb-4 text-center">
-          AI-Powered Recommendations
-        </h2>
+      <div>
+        <h2 className="text-3xl font-headline font-bold mb-6 flex items-center gap-2"><Sparkles className="w-8 h-8 text-amber-500"/> AI-Powered Recommendations</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {recommendedInternships.map((internship, index) => (
-            <Card key={index} className="flex flex-col">
-              <CardHeader>
-                <CardTitle>{internship.title}</CardTitle>
-                <CardDescription className="flex items-center gap-2 pt-1">
-                  <Briefcase className="w-4 h-4" />
-                  {internship.company}
-                </CardDescription>
-                <CardDescription className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  {internship.location}
-                </CardDescription>
+          {recommendedInternships.map((internship, index) => {
+             const matchColor = internship.match > 85 ? 'text-emerald-500' : internship.match >= 70 ? 'text-amber-500' : 'text-rose-500';
+             const progressColor = internship.match > 85 ? 'bg-emerald-500' : internship.match >= 70 ? 'bg-amber-500' : 'bg-rose-500';
+             const avatarBg = avatarColors[index % avatarColors.length];
+
+             return (
+            <Card key={index} className="flex flex-col glass shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-t-4 border-t-transparent hover:border-t-cyan-500 overflow-hidden group">
+              <CardHeader className="pb-4 relative">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-xl mb-4 shadow-inner ${avatarBg}`}>
+                    {internship.company.charAt(0)}
+                </div>
+                <CardTitle className="text-xl leading-tight group-hover:text-primary transition-colors">{internship.title}</CardTitle>
+                <div className="space-y-1.5 mt-2">
+                    <CardDescription className="flex items-center gap-2 text-sm">
+                    <Briefcase className="w-4 h-4 text-primary/70" />
+                    {internship.company}
+                    </CardDescription>
+                    <CardDescription className="flex items-center gap-2 text-sm">
+                    <MapPin className="w-4 h-4 text-cyan-500/70" />
+                    {internship.location}
+                    </CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="flex-grow">
-                <div className="space-y-2">
+                 {/* Skill Tags */}
+                 {(internship as any).skills && (
+                    <div className="flex flex-wrap gap-1.5 mb-6">
+                        {(internship as any).skills.split(',').map((s: string, idx: number) => (
+                             <span key={idx} className="inline-flex items-center rounded-md bg-cyan-500/10 px-2 py-0.5 text-[10px] font-medium text-cyan-600 ring-1 ring-inset ring-cyan-500/20">
+                                {s.trim()}
+                             </span>
+                        ))}
+                    </div>
+                 )}
+
+                <div className="space-y-2 bg-muted/30 p-3 rounded-lg">
                   <div className="flex justify-between items-center">
-                    <Label htmlFor={`progress-${index}`} className="text-sm">
-                      Match Score
+                    <Label htmlFor={`progress-${index}`} className="text-sm font-semibold flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5"/> Match Score
                     </Label>
-                    <span className="text-sm font-medium text-primary">
+                    <span className={`text-sm font-bold ${matchColor}`}>
                       {internship.match}%
                     </span>
                   </div>
                   <Progress
                     id={`progress-${index}`}
                     value={internship.match}
-                    className="h-2"
+                    className="h-2.5 bg-muted"
+                    indicatorClassName={progressColor}
                   />
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
+              <CardFooter className="pt-2">
+                <Button variant="outline" className="w-full border-primary/20 hover:bg-primary/5 hover:text-primary rounded-xl">
                   View Details
                 </Button>
               </CardFooter>
             </Card>
-          ))}
+          )})}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ export const Logo = (props: React.SVGProps<SVGSVGElement>) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
@@ -12,5 +12,8 @@ export const Logo = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M12 2L2 7l10 5 10-5-10-5z" />
     <path d="M2 17l10 5 10-5" />
     <path d="M2 12l10 5 10-5" />
+    <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.2" />
+    <path d="M12 9v6" />
+    <path d="M9 12h6" />
   </svg>
 );
